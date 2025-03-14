@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@tailwindcss/cli": "^4.0.13",
+    "@tailwindcss/cli": "^4.0.14",
     "autoprefixer": "^10.4.21",
     "daisyui": "^5.0.3",
     "postcss": "^8.5.3",
