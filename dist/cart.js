@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       <p>ราคารวม:</p>
                       <p>${totalPrice} บาท</p>
                   </div>
-                 <a href="checkout.html" class="mt-4 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 flex justify-center items-center">
+                 <a href="Checkout.html" class="mt-4 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 flex justify-center items-center">
                     ชำระเงิน
                   </a>
               </div>
