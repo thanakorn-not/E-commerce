@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supermart</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/webp" href="/img/logo.webp" />
+    <script src="cart.js" defer></script>
+    <script>
+        function showSuccessMessage(event) {
+            event.preventDefault();
+            alert("ส่งข้อความสำเร็จแล้ว!");
+            const form = event.target.closest('form'); // หาฟอร์มที่เกี่ยวข้อง
+            form.reset(); // รีเซ็ตฟอร์ม
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-10">
+        <div class="flex items-center gap-4">
+            <img src="/img/logo.webp" alt="Supermart Logo" class="h-10 w-10 object-contain">
+            <div class="text-2xl font-bold text-gray-900">Supermart</div>
+        </div>
+        <div class="flex items-center gap-6 relative">
+            <a href="Home.html" class="text-gray-700 hover:text-orange-500">Home</a>
+            <a href="ProductList.html" class="text-gray-700 hover:text-orange-500">Product</a>
+            <a href="About.html" class="text-gray-700 hover:text-orange-500">About Us</a>
+            <a href="Contact.html" class="text-gray-700 hover:text-orange-500">Contact</a>
+            <button class="text-gray-700 hover:text-orange-500 relative" onclick="toggleCart()">
+                🛒
+                <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
+            </button>
+            <a href="User.html" class="text-gray-700 hover:text-orange-500">👤</a>
+        </div>
+    </nav>
+
+    <!-- Contact Us Section -->
+    <section class="container mx-auto my-12 px-6 text-black">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">ติดต่อ Supermart</h1>
+        <p class="text-lg text-gray-700 mb-4">
+            หากคุณมีคำถามหรือข้อสงสัยเกี่ยวกับสินค้าและบริการของเรา สามารถติดต่อเราได้ตามช่องทางด้านล่างนี้
+        </p>
+
+        <h2 class="text-3xl font-bold text-gray-900 mt-8 mb-4">ที่ตั้งของร้าน</h2>
+        <p class="text-lg text-gray-700 mb-4">
+            Supermart ตั้งอยู่ที่ 123 ถนนสุขใจ แขวงบางรัก เขตบางรัก กรุงเทพมหานคร 10500
+        </p>
+        <p class="text-lg text-gray-700 mb-4">
+            เปิดให้บริการทุกวัน ตั้งแต่ 08:00 น. - 22:00 น.
+        </p>
+
+        <h2 class="text-3xl font-bold text-gray-900 mt-8 mb-4">ช่องทางการติดต่อ</h2>
+        <p class="text-lg text-gray-700 mb-2">📞 โทรศัพท์: 02-123-4567</p>
+        <p class="text-lg text-gray-700 mb-2">📧 อีเมล: support@supermart.com</p>
+        <p class="text-lg text-gray-700 mb-2">🌍 เว็บไซต์: www.supermart.com</p>
+        <p class="text-lg text-gray-700 mb-2">📌 Facebook: facebook.com/supermartth</p>
+        <p class="text-lg text-gray-700 mb-2">📌 Line: @supermart</p>
+
+        <h2 class="text-3xl font-bold text-gray-900 mt-8 mb-4">แบบฟอร์มติดต่อ</h2>
+        <form class="bg-white shadow-lg rounded-lg p-6 max-w-lg">
+            <label class="block text-gray-700 text-lg font-medium mb-2">ชื่อของคุณ</label>
+            <input type="text" class="w-full px-4 py-2 border rounded-lg mb-4" placeholder="กรอกชื่อของคุณ" required />
+            
+            <label class="block text-gray-700 text-lg font-medium mb-2">อีเมล</label>
+            <input type="email" class="w-full px-4 py-2 border rounded-lg mb-4" placeholder="กรอกอีเมลของคุณ" required />
+            
+            <label class="block text-gray-700 text-lg font-medium mb-2">ข้อความ</label>
+            <textarea class="w-full px-4 py-2 border rounded-lg mb-4" placeholder="กรอกข้อความของคุณ" rows="4" required></textarea>
+            
+            <button type="submit" onclick="showSuccessMessage(event)" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600">ส่งข้อความ</button>
+        </form>
+    </section>
+    <!-- Cart Sidebar -->
+    <section id="cart-sidebar" class="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-6 transform translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <h2 class="text-2xl font-bold ">Shopping Cart</h2>
+            <button class="text-red-500 text-xl" onclick="toggleCart()">✖</button>
+        </div>
+        <div class="space-y-4 overflow-y-auto max-h-[70vh] text-black"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-6 text-center">
+        <p>&copy; 2024 | Design by Thanakorn Ingkawara</p>
+    </footer>
+</body>
+</html>

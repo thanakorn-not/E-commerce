@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supermart</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/webp" href="/img/logo.webp" />
+    <script src="cart.js" defer></script>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav
+      class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-10"
+    >
+      <div class="flex items-center gap-4">
+        <img
+          src="/img/logo.webp"
+          alt="Supermart Logo"
+          class="h-10 w-10 object-contain"
+        />
+        <div class="text-2xl font-bold text-gray-900">Supermart</div>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="Home.html" class="text-gray-700 hover:text-orange-500">Home</a>
+        <a href="ProductList.html" class="text-gray-700 hover:text-orange-500"
+          >Product</a
+        >
+        <a href="about.html" class="text-gray-700 hover:text-orange-500"
+          >About Us</a
+        >
+        <a href="contact.html" class="text-gray-700 hover:text-orange-500"
+          >Contact</a
+        >
+        <button
+          class="text-gray-700 hover:text-orange-500 relative"
+          onclick="toggleCart()"
+        >
+          🛒
+          <span
+            id="cart-count"
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"
+            >0</span
+          >
+        </button>
+        <a href="User.html" class="text-gray-700 hover:text-orange-500">👤</a>
+      </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <section
+      id="cart-sidebar"
+      class="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-6 transform translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <h2 class="text-2xl font-bold">Shopping Cart</h2>
+        <button class="text-red-500 text-xl" onclick="toggleCart()">✖</button>
+      </div>
+      <div class="space-y-4 overflow-y-auto max-h-[70vh] text-black"></div>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let cartCount = 0;
+        const cartCountElement = document.getElementById("cart-count");
+        const addToCartButtons = document.querySelectorAll(".add-to-cart");
+
+        addToCartButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            cartCount++;
+            cartCountElement.textContent = cartCount;
+          });
+        });
+      });
+    </script>
+
+    <section class="container mx-auto my-12 px-6 text-black">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6">Product</h2>
+
+      <!-- Search and Filter -->
+      <div class="flex flex-wrap items-center justify-between mb-6">
+        <input
+          type="text"
+          id="search"
+          placeholder="Search products..."
+          class="p-2 border rounded-lg w-full md:w-1/3"
+        />
+        <select
+          id="categoryFilter"
+          class="p-2 border rounded-lg w-full md:w-1/4 mt-2 md:mt-0"
+        >
+          <option value="all">All Categories</option>
+          <option value="vegetables">Vegetables</option>
+          <option value="fruits">Fruits</option>
+          <option value="snacks">Snacks</option>
+          <option value="coffee-tea">Coffee & Tea</option>
+          <option value="milk-water">Milk & Water</option>
+        </select>
+      </div>
+
+      <script>
+        // รอจนกว่า DOM จะโหลดเสร็จ
+        document.addEventListener("DOMContentLoaded", () => {
+          const urlParams = new URLSearchParams(window.location.search);
+          let category =
+            urlParams.get("category") ||
+            localStorage.getItem("selectedCategory");
+
+          const categoryFilter = document.getElementById("categoryFilter");
+          const productList = document.getElementById("productList");
+
+          if (!productList) {
+            console.error(
+              "Error: #productList element not found in the document."
+            );
+            return; // หยุดการทำงานถ้าไม่มี productList
+          }
+
+          if (category) {
+            categoryFilter.value = category;
+            filterProducts(category);
+          }
+
+          categoryFilter.addEventListener("change", (event) => {
+            const selectedCategory = event.target.value;
+            localStorage.setItem("selectedCategory", selectedCategory);
+            filterProducts(selectedCategory);
+          });
+
+          function filterProducts(category) {
+            console.log("Filtering category:", category); // ตรวจสอบค่าที่รับมา
+            const products = document.getElementsByClassName("product");
+
+            if (products.length === 0) {
+              console.error("No products found in DOM!");
+              return;
+            }
+
+            for (const product of products) {
+              console.log(`Checking product: ${product.dataset.category}`); // เช็คหมวดหมู่ของแต่ละสินค้า
+              product.style.display =
+                category === "all" || product.dataset.category === category
+                  ? "block"
+                  : "none";
+            }
+          }
+        });
+      </script>
+
+      <!-- Product Grid -->
+      <div id="productGrid">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="productList">
+          <!-- สินค้า 1 -->
+          <div
+            class="bg-white shadow-lg rounded-lg p-4 text-center product"
+            data-category="snacks"
+          >
+            <img
+              src="/img/lay1.jpg"
+              class="mx-auto mb-2 h-48 w-full object-contain"
+              alt="Product"
+            />
+            <p class="font-medium text-black">เลย์รสซาวครีมและหัวหอม</p>
+            <p class="text-gray-600">20 บาท</p>
+            <button
+              class="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+              onclick="showProductDetail('lay1')"
+            >
+              🛒 เลือกซื้อสินค้า
+            </button>
+          </div>
+          <div
+            class="bg-white shadow-lg rounded-lg p-4 text-center product"
+            data-category="snacks"
+          >
+            <img
+              src="/img/snack1.webp"
+              class="mx-auto mb-2 h-48 w-full object-contain"
+              alt="Product"
+            />
+            <p class="font-medium text-black">
+              สแน็คแจ็ครสหอยเชลล์ภูเขาไฟสไปซี่
+            </p>
+            <p class="text-gray-600">20 บาท</p>
+            <button
+              class="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+              onclick="showProductDetail('snack1')"
+            >
+              🛒 เลือกซื้อสินค้า
+            </button>
+          </div>
+          <div
+            class="bg-white shadow-lg rounded-lg p-4 text-center product"
+            data-category="coffee-tea"
+          >
+            <img
+              src="/img/coffee.jpeg"
+              class="mx-auto mb-2 h-48 w-full object-contain"
+              alt="Product"
+            />
+            <p class="font-medium text-black">กาแฟดำอาราบิก้า</p>
+            <p class="text-gray-600">50 บาท</p>
+            <button
+              class="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+              onclick="showProductDetail('coffee1')"
+            >
+              🛒 เลือกซื้อสินค้า
+            </button>
+          </div>
+          <div
+            class="bg-white shadow-lg rounded-lg p-4 text-center product"
+            data-category="fruits"
+          >
+            <img
+              src="/img/starwberry.jpg"
+              class="mx-auto mb-2 h-48 w-full object-contain"
+              alt="Product"
+            />
+            <p class="font-medium text-black">สตรอว์เบอร์รี่สด</p>
+            <p class="text-gray-600">80 บาท</p>
+            <button
+              class="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+              onclick="showProductDetail('fruit1')"
+            >
+              🛒 เลือกซื้อสินค้า
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ส่วนแสดงรายละเอียดสินค้า (ซ่อนไว้โดย default) -->
+    <div
+      id="productDetail"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+    >
+      <div class="bg-white rounded-lg p-6 max-w-lg w-full">
+        <h2 id="detailTitle" class="text-xl font-bold mb-4 text-black"></h2>
+        <img
+          id="detailImage"
+          src=""
+          class="mx-auto mb-4 h-48 w-full object-contain"
+          alt="Product Detail"
+        />
+        <p id="detailPrice" class="text-black mb-4"></p>
+        <p id="detailDescription" class="text-gray-800 mb-4"></p>
+
+        <!-- ปุ่มเพิ่ม/ลดจำนวนสินค้า -->
+        <div class="flex items-center justify-center mb-4">
+          <input
+            id="quantity"
+            type="number"
+            value="1"
+            min="1"
+            class="w-16 text-center text-black border-2 border-black-500"
+          />
+        </div>
+
+        <!-- ปุ่มเพิ่มสินค้าลงตะกร้า -->
+        <button
+          class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 add-to-cart"
+          data-name="เลย์รสซาวครีมและหัวหอม"
+          data-price="20"
+          data-image="/img/lay1.jpg"
+        >
+          เพิ่มลงตะกร้า
+        </button>
+
+        <!-- ปุ่มปิด -->
+        <button
+          onclick="hideProductDetail()"
+          class="mt-4 w-full px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+        >
+          ปิด
+        </button>
+      </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <section
+      id="cart-sidebar"
+      class="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-6 transform translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <h2 class="text-2xl font-bold">Shopping Cart</h2>
+        <button class="text-red-500 text-xl" onclick="toggleCart()">✖</button>
+      </div>
+      <div class="space-y-4 overflow-y-auto max-h-[70vh] text-black"></div>
+    </section>
+
+    <script>
+      let currentProduct = null; // เก็บข้อมูลสินค้าปัจจุบัน
+      let quantity = 1; // จำนวนสินค้า
+      // ฟังก์ชันแสดงรายละเอียดสินค้า
+      function showProductDetail(productId) {
+        const products = {
+          lay1: {
+            id: "lay1",
+            title: "เลย์รสซาวครีมและหัวหอม",
+            image: "/img/lay1.jpg",
+            price: 20, // เปลี่ยนเป็นตัวเลข
+            description:
+              "รายละเอียดเพิ่มเติมเกี่ยวกับสินค้าเลย์รสซาวครีมและหัวหอม...",
+          },
+          snack1: {
+            id: "snack1",
+            title: "สแน็คแจ็ครสหอยเชลล์ภูเขาไฟสไปซี่",
+            image: "/img/snack1.webp",
+            price: 20, // เปลี่ยนเป็นตัวเลข
+            description:
+              "รายละเอียดเพิ่มเติมเกี่ยวกับสินค้าเลย์รสซาวครีมและหัวหอม...",
+          },
+          coffee1: {
+            id: "coffee1",
+            title: "กาแฟดำอาราบิก้า",
+            image: "/img/coffee.jpeg",
+            price: 50, // เปลี่ยนเป็นตัวเลข
+            description:
+              "รายละเอียดเพิ่มเติมเกี่ยวกับสินค้าเลย์รสซาวครีมและหัวหอม...",
+          },
+          fruit1: {
+            id: "fruit1",
+            title: "สตรอว์เบอร์รี่สด",
+            image: "/img/starwberry.jpg",
+            price: 80, // เปลี่ยนเป็นตัวเลข
+            description:
+              "รายละเอียดเพิ่มเติมเกี่ยวกับสินค้าเลย์รสซาวครีมและหัวหอม...",
+          },
+        };
+
+        const product = products[productId];
+        if (product) {
+          document.getElementById("detailTitle").innerText = product.title;
+          document.getElementById("detailImage").src = product.image;
+          document.getElementById("detailPrice").innerText =
+            product.price + " บาท";
+          document.getElementById("detailDescription").innerText =
+            product.description;
+          document.getElementById("productDetail").classList.remove("hidden");
+          document.getElementById("quantity").value = 1;
+
+          currentProduct = product; // เก็บค่าของสินค้าที่เลือก
+          quantity = 1;
+        }
+      }
+
+      // ฟังก์ชันซ่อนรายละเอียดสินค้า
+      function hideProductDetail() {
+        document.getElementById("productDetail").classList.add("hidden");
+      }
+    </script>
+
+    <script>
+      document.getElementById("search").addEventListener("input", function () {
+        let searchValue = this.value.trim().toLowerCase(); // ดึงค่าจากช่องค้นหา
+        document
+          .querySelectorAll("#productList .product")
+          .forEach((product) => {
+            let productName = product
+              .querySelector("p")
+              .innerText.toLowerCase(); // ดึงชื่อสินค้า
+            // ตรวจสอบว่าชื่อสินค้ามีค่าที่ค้นหาหรือไม่
+            product.style.display = productName.includes(searchValue)
+              ? ""
+              : "none";
+          });
+      });
+
+      function filterProducts(category) {
+        document
+          .querySelectorAll("#productList .product")
+          .forEach((product) => {
+            let productCategory = product.getAttribute("data-category"); // ดึงหมวดหมู่สินค้า
+            // ตรวจสอบว่าหมวดหมู่ตรงกับที่เลือกหรือไม่
+            product.style.display =
+              category === "all" || productCategory === category ? "" : "none";
+          });
+      }
+    </script>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-4 mt-8">
+      <p>&copy; 2023 Your Store. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
